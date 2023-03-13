@@ -12,14 +12,9 @@ namespace TicTacToeGame.TicTacToe
     {
         private const string V = " ";
         public string agent = "O";
+        public string player1 = "X";
         public GameAiAgent() { }
 
-        public enum Scores
-        {
-            X = -1,
-            O = 1,
-            tie = 0
-        }
 
         public int evaluate(string value)
         {
@@ -38,14 +33,16 @@ namespace TicTacToeGame.TicTacToe
         public int[] bestMove(GameField gameField) 
         {
             int[] move = new int[2];
-            int bestScore = -10000;
+            int bestScore = -100000;
+
+           
 
             for(int i = 0; i < gameField.gameField.GetLength(0); i++)// güzel ama kontorl et
             {
                 for(int j = 0; j < gameField.gameField.GetLength(0); j++)
                 {
                     // If the spot available
-                    if (gameField.gameField[i, j] == V)
+                    if (gameField.gameField[i, j].Equals(V))
                     {
                         gameField.gameField[i, j] = agent;
                         int score = minimax(gameField.gameField, 0, false);
@@ -72,6 +69,7 @@ namespace TicTacToeGame.TicTacToe
             newGameField.gameField = gameField;
 
             string currentResult = newGameField.hasWon();
+
             if (currentResult != null) 
             {
                 int score = evaluate(currentResult);
@@ -83,7 +81,7 @@ namespace TicTacToeGame.TicTacToe
 
                 int bestScore = -100000;
 
-                for (int i = 0; i < newGameField.gameField.GetLength(0); i++)// güzel ama kontorl et
+                for (int i = 0; i < newGameField.gameField.GetLength(0); i++)
                 {
                     for (int j = 0; j < newGameField.gameField.GetLength(0); j++)
                     {
@@ -91,8 +89,8 @@ namespace TicTacToeGame.TicTacToe
                         if (newGameField.gameField[i, j] == V)
                         {
                             newGameField.gameField[i, j] = agent;
-                            int score = minimax(newGameField.gameField, 0, false);
-                            newGameField.gameField[i, j] = V;
+                            int score = minimax(newGameField.gameField, depth+1, false);
+                           newGameField.gameField[i, j] = V;
 
                             bestScore = Math.Max(score, bestScore);
                             
@@ -105,15 +103,15 @@ namespace TicTacToeGame.TicTacToe
             {
                 int bestScore = 100000;
 
-                for (int i = 0; i < newGameField.gameField.GetLength(0); i++)// güzel ama kontorl et
+                for (int i = 0; i < newGameField.gameField.GetLength(0); i++)
                 {
                     for (int j = 0; j < newGameField.gameField.GetLength(0); j++)
                     {
                         // If the spot available
                         if (newGameField.gameField[i, j] == V)
                         {
-                            newGameField.gameField[i, j] = agent;
-                            int score = minimax(newGameField.gameField, 0, true);
+                            newGameField.gameField[i, j] = player1;
+                            int score = minimax(newGameField.gameField, depth+1, true);
                             newGameField.gameField[i, j] = V;
 
                             bestScore = Math.Min(score, bestScore);
